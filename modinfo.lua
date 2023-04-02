@@ -1,8 +1,8 @@
 -- This information tells other players more about the mod
 name = "Paper Grenade"
-description = "You just Throw, and Pop! v1.2.8.m"
+version = "1.2.9.m"
+description = "You just Throw, and Pop! v"..version
 author = "Zerunokasiar"
-version = "1.2.8.m"
 
 -- This is the URL name of the mod's thread on the forum; the part after the index.php? and before the first & in the URL
 forumthread = ""
@@ -21,16 +21,6 @@ icon_atlas = "images/modicon.xml"
 icon = "modicon.tex"
 
 configuration_options = {
-    {
-        name = "paper_grenade_dmg_multiplier",
-        label = "Character Damage Multiplier",
-        options =
-        {
-            {description="Apply", data = true, hover = ""},
-            {description="Ignore", data = false, hover = ""},
-        },
-        default = true,
-    },
     {
         name = "paper_grenade_dmg",
         label = "Explosion Damage",

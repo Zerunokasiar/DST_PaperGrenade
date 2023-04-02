@@ -43,13 +43,19 @@ local function OnThrown(inst, owner)
 	if owner.components.combat.damagemultiplier then
 		multiplier = owner.components.combat.damagemultiplier
 	end
-	if TUNING.PAPERGRENADE_MUL then
-		inst.components.combat.damagemultiplier = multiplier
-	else
-		inst.components.weapon:SetDamage(damage / multiplier)
-	end
 	inst.Physics:SetCollisionCallback(onCollide)
 	inst:DoPeriodicTask(0.5,function() onTimer(inst) end)
+end
+
+local function GetMultiplier(owner)
+	local combat = owner.components.combat
+	local multiplier = combat.damagemultiplier or 1
+	multiplier = multiplier * combat.externaldamagemultipliers:Get()
+	if multiplier > 1 then
+		multiplier = multiplier - 1
+		multiplier = multiplier / 2.0 + 1
+	end
+	return 1.0 / multiplier
 end
 
 local function OnHit(inst, owner, target)
@@ -59,9 +65,8 @@ local function OnHit(inst, owner, target)
 	for i, v in ipairs(AllPlayers) do
 		v:ShakeCamera(CAMERASHAKE.FULL, 0.7, 0.02, 0.5, inst, 40)
 	end
-	if not TUNING.PAPERGRENADE_MUL then
-		inst.components.weapon:SetDamage(TUNING.PAPERGRENADE_DMG)
-	end
+	local damage = GetMultiplier(owner) * TUNING.PAPERGRENADE_DMG
+	inst.components.weapon:SetDamage(damage)
 	inst.components.combat:DoAreaAttack(target, TUNING.PAPERGRENADE_AOE, inst)
 	local impactfx = SpawnPrefab("impact")
 	if impactfx then
